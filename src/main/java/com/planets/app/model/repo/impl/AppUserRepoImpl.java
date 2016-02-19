@@ -27,10 +27,10 @@ public class AppUserRepoImpl implements AppUserRepoCustom {
      * {@inheritDoc}
      */
     @Override
-    public AppUser create(Long uin) {
-        AppUser user = appUserRepo.findByUin(uin);
+    public AppUser create(Long id) {
+        AppUser user = appUserRepo.findById(id);
         if (user == null) {
-            return appUserRepo.save(new AppUser(uin));
+            return appUserRepo.save(new AppUser(id));
         }
         return user;
     }

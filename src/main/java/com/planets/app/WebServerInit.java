@@ -21,7 +21,7 @@ import edu.tamu.framework.CoreSpringBanner;
  * Web server initialization.
  * 
  */
-@ComponentScan(basePackages = { "edu.tamu.framework", "com.planets.app" })
+@ComponentScan(basePackages = { "edu.tamu.framework", "com.planets.app", "com.planets.game" })
 @SpringBootApplication
 public class WebServerInit extends SpringBootServletInitializer {
 

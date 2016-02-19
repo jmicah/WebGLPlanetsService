@@ -34,7 +34,7 @@ public class UserTest {
 		
 		// Test create user
 		AppUser testUser1 = userRepo.create(Long.parseLong("123456789"));		
-		AppUser assertUser = userRepo.findByUin(Long.parseLong("123456789"));		
+		AppUser assertUser = userRepo.findById(Long.parseLong("123456789"));		
 		Assert.assertEquals("Test User1 was not added.", testUser1.getUin(), assertUser.getUin());
 	
 		// Test disallow duplicate UINs

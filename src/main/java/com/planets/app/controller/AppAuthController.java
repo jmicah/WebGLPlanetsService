@@ -195,7 +195,6 @@ public class AppAuthController extends CoreAuthController {
 
         payload.put("lastName", user.getLastName());
         payload.put("firstName", user.getFirstName());
-        payload.put("netid", user.getNetid());
         payload.put("uin", String.valueOf(user.getUin()));
         payload.put("email", user.getEmail());
 

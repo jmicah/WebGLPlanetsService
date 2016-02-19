@@ -30,7 +30,7 @@ import edu.tamu.framework.model.ApiResponse;
 import edu.tamu.framework.model.Credentials;
 
 /**
- * Application Stomp interceptor. Checks command, decodes and verifies token,
+ * Application Stomp intercepter. Checks command, decodes and verifies token,
  * either returns error message to frontend or continues to controller.
  * 
  */
@@ -64,11 +64,11 @@ public class AppStompInterceptor extends CoreStompInterceptor {
 
             if (user == null) {
                 // do not create user
-                // return null for the core interceptor to return error to ui
+                // return null for the core intercepter to return error to ui
                 return null;
             }
         } else {
-            user = userRepo.findByUin(Long.parseLong(shib.getUin()));
+            user = userRepo.findById(Long.parseLong(shib.getUin()));
             adminTarget = shib.getUin();
         }
 

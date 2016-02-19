@@ -68,7 +68,7 @@ public class AppRestInterceptor extends CoreRestInterceptor {
                 return null;
             }
         } else {
-            user = userRepo.findByUin(Long.parseLong(shib.getUin()));
+            user = userRepo.findById(Long.parseLong(shib.getUin()));
             adminTarget = shib.getUin();
         }
 

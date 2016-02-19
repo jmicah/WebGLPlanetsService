@@ -22,14 +22,14 @@ import com.planets.app.model.AppUser;
 public interface AppUserRepo extends JpaRepository<AppUser, Long>, AppUserRepoCustom {
 
     /**
-     * Retrieve user by UIN.
+     * Retrieve user by id.
      * 
-     * @param uin
+     * @param id
      *            Long
      * 
      * @return AppUser
      */
-    public AppUser findByUin(Long uin);
+    public AppUser findById(Long id);
 
     /**
      * Retrieve user by email.

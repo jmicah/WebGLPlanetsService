@@ -17,12 +17,12 @@ import com.planets.app.model.AppUser;
 public interface AppUserRepoCustom {
 
     /**
-     * method to create user based on uin
+     * method to create user based on id
      * 
-     * @param uin
+     * @param id
      *            Long
      */
-    public AppUser create(Long uin);
+    public AppUser create(Long id);
 
     public AppUser create(String email, String firstName, String lastName, String role);
 

@@ -28,9 +28,9 @@ import edu.tamu.framework.config.CoreWebAppConfig;
 @Configuration
 @ComponentScan(basePackages = { "com.planets.app.config", "com.planets.app.controller" })
 @ConfigurationProperties(prefix = "app.controller")
-@EnableJpaRepositories(basePackages = { "com.planets.app.model.repo" })
-@EntityScan(basePackages = { "com.planets.app.model" })
-public class TamuWebserviceSeedWebAppConfig extends CoreWebAppConfig {
+@EnableJpaRepositories(basePackages = { "com.planets.app.model.repo", "com.planets.game.model.repo" })
+@EntityScan(basePackages = { "com.planets.app.model", "com.planets.game.model" })
+public class WebAppConfig extends CoreWebAppConfig {
 
     /**
      * Rest interceptor bean.

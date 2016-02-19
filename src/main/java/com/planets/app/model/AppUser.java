@@ -23,9 +23,6 @@ import edu.tamu.framework.model.AbstractCoreUserImpl;
 @Entity
 public class AppUser extends AbstractCoreUserImpl {
 
-    @Column(nullable = true)
-    private String netid;
-
     @Column(nullable = true, unique = true)
     private String email;
 
@@ -49,21 +46,27 @@ public class AppUser extends AbstractCoreUserImpl {
     }
 
     /**
-     * Constructor for application user with uin passed.
+     * Constructor for application user with id passed.
      * 
-     * @param uin
+     * @param id
      *            Long
      * 
      */
-    public AppUser(Long uin) {
-        super(uin);
+    public AppUser(Long id) {
+        super(id);
     }
 
     /**
-     * Constructor for application user with uin passed.
+     * Constructor for application user with email, firstName, lastName and role passed.
      * 
-     * @param uin
-     *            Long
+     * @param email
+     *            String
+     * @param firstName
+     *            String
+     * @param lastName
+     *            String
+     * @param role
+     *            String
      * 
      */
     public AppUser(String email, String firstName, String lastName, String role) {
@@ -71,21 +74,6 @@ public class AppUser extends AbstractCoreUserImpl {
         setFirstName(firstName);
         setLastName(lastName);
         setRole(role);
-    }
-
-    /**
-     * @return the netid
-     */
-    public String getNetid() {
-        return netid;
-    }
-
-    /**
-     * @param netid
-     *            the netid to set
-     */
-    public void setNetid(String netid) {
-        this.netid = netid;
     }
 
     /**
