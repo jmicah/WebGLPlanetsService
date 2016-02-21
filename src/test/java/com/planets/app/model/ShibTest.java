@@ -1,4 +1,4 @@
-package com.planets.app.model.impl;
+package com.planets.app.model;
 
 import java.util.Date;
 import java.util.HashMap;

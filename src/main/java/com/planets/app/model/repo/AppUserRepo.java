@@ -29,7 +29,7 @@ public interface AppUserRepo extends JpaRepository<AppUser, Long>, AppUserRepoCu
      * 
      * @return AppUser
      */
-    public AppUser findById(Long id);
+    public AppUser findByUin(Long uin);
 
     /**
      * Retrieve user by email.

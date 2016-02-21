@@ -9,10 +9,16 @@
  */
 package com.planets.app.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.planets.game.model.Player;
 
 import edu.tamu.framework.model.AbstractCoreUserImpl;
 
@@ -22,7 +28,7 @@ import edu.tamu.framework.model.AbstractCoreUserImpl;
  */
 @Entity
 public class AppUser extends AbstractCoreUserImpl {
-
+	
     @Column(nullable = true, unique = true)
     private String email;
 
@@ -37,6 +43,12 @@ public class AppUser extends AbstractCoreUserImpl {
     @Column(nullable = true)
     private String lastName;
 
+    @OneToMany (
+			targetEntity = Player.class,
+			cascade = {CascadeType.PERSIST}
+			)
+	public List<Player> players = new ArrayList<Player>();
+    
     /**
      * Constructor for the application user
      * 
@@ -48,12 +60,12 @@ public class AppUser extends AbstractCoreUserImpl {
     /**
      * Constructor for application user with id passed.
      * 
-     * @param id
+     * @param UIN
      *            Long
      * 
      */
-    public AppUser(Long id) {
-        super(id);
+    public AppUser(Long uin) {
+        super(uin);
     }
 
     /**
@@ -69,13 +81,12 @@ public class AppUser extends AbstractCoreUserImpl {
      *            String
      * 
      */
-    public AppUser(String email, String firstName, String lastName, String role) {
-        setEmail(email);
-        setFirstName(firstName);
-        setLastName(lastName);
-        setRole(role);
+    public AppUser(String email, String firstName, String lastName) {
+    	this.email = email;
+    	this.firstName = firstName;
+    	this.lastName = lastName;
     }
-
+    
     /**
      * @return the email
      */
@@ -140,5 +151,13 @@ public class AppUser extends AbstractCoreUserImpl {
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
+    
+	public List<Player> getPlayers() {
+		return this.players;
+	}
+
+	public void addPlayer(Player player) {
+		this.players.add(player);
+	}
 
 }

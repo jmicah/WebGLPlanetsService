@@ -19,11 +19,11 @@ public interface AppUserRepoCustom {
     /**
      * method to create user based on id
      * 
-     * @param id
+     * @param uin
      *            Long
      */
-    public AppUser create(Long id);
+    public AppUser create(Long uin);
 
-    public AppUser create(String email, String firstName, String lastName, String role);
+    public AppUser create(String email, String firstName, String lastName);
 
 }

@@ -64,8 +64,10 @@ public class PlanetTest {
 		Assert.assertEquals(1700,planet.getCoordinates().get("y").intValue());
 		Assert.assertEquals(Native.HUMANOIDS,planet.getNatives());
 		
-		AppUser user = users.create("kirk@planets.com", "James", "Kirk", "ROLE_USER");
-		Player player = players.create(RaceType.FEDERATION, user);
+		AppUser user = users.create("kirk@planets.com", "James", "Kirk");
+		Player player = players.create(RaceType.FEDERATION);
+		user.addPlayer(player);
+		users.save(user);
 		
 		planet.setColonistsHappiness(80);
 		planet.setColonistsTaxRate(10);
@@ -103,7 +105,7 @@ public class PlanetTest {
 				
 		planet = planets.findById(planetId);
 		player = players.findById(playerId);
-		user = users.findById(userId);
+		user = users.findOne(userId);
 		
 		Assert.assertEquals(80,planet.getColonistsHappiness());
 		Assert.assertEquals(10,planet.getColonistsTaxRate());
@@ -128,7 +130,7 @@ public class PlanetTest {
 		Assert.assertEquals(300,planet.getNeutroniumOnSurface());
 		Assert.assertEquals(30,planet.getNeutroniumRate());
 		Assert.assertEquals(10000,planet.getColonistPopulation());
-		Assert.assertEquals(player,planet.getPlayer());
+		Assert.assertEquals(player.getId(),planet.getPlayer().getId());
 		Assert.assertEquals(500,planet.getSupplies());
 		Assert.assertEquals(0,planet.getTemp());
 		Assert.assertEquals(4000,planet.getTritaniumInGround());
@@ -136,8 +138,8 @@ public class PlanetTest {
 		Assert.assertEquals(40,planet.getTritaniumRate());
 		
 		planets.delete(planet);
-		players.delete(player);
 		users.delete(user);
+		players.delete(player);
 		
 		Assert.assertEquals(0,planets.findAll().size());
 		Assert.assertEquals(0,players.findAll().size());

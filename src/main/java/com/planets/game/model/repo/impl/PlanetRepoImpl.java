@@ -14,15 +14,21 @@ public class PlanetRepoImpl implements PlanetRepoCustom {
 
 	@Override
 	public Planet create(Long id) {
-		// TODO Auto-generated method stub
-		return null;
+		Planet planet = planetRepo.findById(id);
+		if (planet == null) {
+			return planetRepo.save(new Planet(id));
+		}
+		return planet;
 	}
 
 	@Override
 	public Planet create(String name, int temp, int x, int y,
 			Native natives) {
-		// TODO Auto-generated method stub
-		return null;
+		Planet planet = planetRepo.findByName(name);
+		if (planet == null) {
+			return planetRepo.save(new Planet(name, temp, x, y, natives));
+		}
+		return planet;
 	}
 	
 }

@@ -108,7 +108,13 @@ public class Planet {
 	@JoinTable(name="connecting_jump_planets")
 	public List<Planet> connectingJumpPlanets;
 	
-	protected Planet(String name, int temp, int x, int y, Native natives) {
+	public Planet() {}
+	
+	public Planet(Long id) {
+		this.id = id;
+	}
+	
+	public Planet(String name, int temp, int x, int y, Native natives) {
 		
 		this.name = name;
 		this.temp = temp;		

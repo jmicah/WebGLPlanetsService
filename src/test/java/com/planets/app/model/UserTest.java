@@ -1,4 +1,4 @@
-package com.planets.app.model.impl;
+package com.planets.app.model;
 
 import java.util.List;
 
@@ -33,14 +33,15 @@ public class UserTest {
 	public void testMethod() {
 		
 		// Test create user
-		AppUser testUser1 = userRepo.create(Long.parseLong("123456789"));		
-		AppUser assertUser = userRepo.findById(Long.parseLong("123456789"));		
-		Assert.assertEquals("Test User1 was not added.", testUser1.getUin(), assertUser.getUin());
+		Long uin = Long.parseLong("123456789");
+		AppUser testUser1 = userRepo.create(uin);		
+		AppUser assertUser = userRepo.findByUin(Long.parseLong("123456789"));		
+		Assert.assertEquals("Test User1 was not added.", uin, assertUser.getUin());
 	
-		// Test disallow duplicate UINs
+		// Test disallow duplicate ids
 		userRepo.create(Long.parseLong("123456789"));		
 		List<AppUser> allUsers = (List<AppUser>) userRepo.findAll();		
-		Assert.assertEquals("Duplicate UIN found.", 1, allUsers.size());
+		Assert.assertEquals("Duplicate Id found.", 1, allUsers.size());
 				
 		// Test delete user
 		userRepo.delete(testUser1);		

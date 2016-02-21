@@ -145,7 +145,7 @@ public class AppAuthController extends CoreAuthController {
             return new ApiResponse(ERROR, "Token has expired! Please begin registration again.");
         }
 
-        AppUser user = userRepo.create(email, firstName, lastName, "ROLE_USER");
+        AppUser user = userRepo.create(email, firstName, lastName);
         user.setPassword(authUtility.encodePassword(password));
 
         user.setRole("ROLE_USER");

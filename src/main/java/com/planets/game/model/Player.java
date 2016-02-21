@@ -16,7 +16,7 @@ public class Player {
 
 	@Id
 	@GeneratedValue
-	private Long id;
+	public Long id;
 	
 	public RaceType raceType;
 	
@@ -32,9 +32,14 @@ public class Player {
 			)
 	public Game game;
 	
-	protected Player(RaceType race, AppUser user){
+	public Player() {}
+	
+	public Player(Long id) {
+		this.id = id;
+	}
+	
+	public Player(RaceType race){
 		this.raceType = race;
-		this.user = user;
 	}
 	
 	public void setId(Long id) {

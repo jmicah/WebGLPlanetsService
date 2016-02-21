@@ -27,10 +27,10 @@ public class AppUserRepoImpl implements AppUserRepoCustom {
      * {@inheritDoc}
      */
     @Override
-    public AppUser create(Long id) {
-        AppUser user = appUserRepo.findById(id);
+    public AppUser create(Long uin) {
+        AppUser user = appUserRepo.findByUin(uin);
         if (user == null) {
-            return appUserRepo.save(new AppUser(id));
+            return appUserRepo.save(new AppUser(uin));
         }
         return user;
     }
@@ -39,10 +39,10 @@ public class AppUserRepoImpl implements AppUserRepoCustom {
      * {@inheritDoc}
      */
     @Override
-    public AppUser create(String email, String firstName, String lastName, String role) {
+    public AppUser create(String email, String firstName, String lastName) {
         AppUser user = appUserRepo.findByEmail(email);
         if (user == null) {
-            return appUserRepo.save(new AppUser(email, firstName, lastName, role));
+            return appUserRepo.save(new AppUser(email, firstName, lastName));
         }
         return user;
     }
