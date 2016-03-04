@@ -11,13 +11,19 @@ package com.planets.app.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
-import javax.persistence.CascadeType;
+import static javax.persistence.CascadeType.ALL;
+import static javax.persistence.CascadeType.PERSIST;
+import static javax.persistence.FetchType.LAZY;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.planets.game.model.Game;
 import com.planets.game.model.Player;
 
 import edu.tamu.framework.model.AbstractCoreUserImpl;
@@ -51,8 +57,15 @@ public class AppUser extends AbstractCoreUserImpl {
     private String lastName;
 
     @OneToMany (
+    		cascade = ALL,
+    		fetch = LAZY,
+    		orphanRemoval = true
+    		)
+    private Set<Game> games = new TreeSet<Game>();
+    
+    @OneToMany (
 			targetEntity = Player.class,
-			cascade = {CascadeType.PERSIST}
+			cascade = { PERSIST }
 			)
 	private List<Player> players = new ArrayList<Player>();
     
@@ -171,6 +184,20 @@ public class AppUser extends AbstractCoreUserImpl {
      */
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+    
+    public Set<Game> getGames() {
+    	return this.games;
+    }
+    
+    public Set<Game> addGame(Game game) {
+    	this.games.add(game);
+    	return this.games;
+    }
+    
+    public Set<Game> removeGame(Game game) {
+    	this.games.remove(game);
+    	return this.games;
     }
     
 	/**

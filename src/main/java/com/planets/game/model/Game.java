@@ -3,7 +3,11 @@ package com.planets.game.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.CascadeType;
+import static javax.persistence.CascadeType.DETACH;
+import static javax.persistence.CascadeType.MERGE;
+import static javax.persistence.CascadeType.REFRESH;
+import static javax.persistence.CascadeType.PERSIST;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -12,11 +16,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.planets.app.model.AppUser;
-import com.planets.game.model.IonStorm;
-import com.planets.game.model.MineField;
-import com.planets.game.model.Planet;
 import com.planets.game.model.Player;
-import com.planets.game.model.Ship;
 
 @Entity
 @Table(name = "game")
@@ -27,43 +27,16 @@ public class Game {
 	private Long id;
 	
 	@ManyToOne (
-			targetEntity = AppUser.class,
-			cascade = {CascadeType.PERSIST}
+			cascade = { DETACH, REFRESH, MERGE },
+			optional = false
 			)
 	public AppUser owner;
 	
 	@OneToMany (
 			targetEntity = Player.class,
-			cascade = {CascadeType.PERSIST}
+			cascade = { PERSIST }
 			)
-	public List<Player> players;
-	
-	public int mapHeight;
-	public int mapWidth;
-	
-	@OneToMany (
-			targetEntity = Planet.class,
-			cascade = {CascadeType.PERSIST}
-			)
-	public List<Planet> planets;
-	
-	@OneToMany (
-			targetEntity = Ship.class,
-			cascade = {CascadeType.PERSIST}
-			)
-	public List<Ship> ships;
-	
-	@OneToMany (
-			targetEntity = MineField.class,
-			cascade = {CascadeType.PERSIST}
-			)
-	public List<MineField> mines;
-	
-	@OneToMany (
-			targetEntity = IonStorm.class,
-			cascade = {CascadeType.PERSIST}
-			)
-	public List<IonStorm> storms;
+	public List<Player> players = new ArrayList<Player>();
 	
 	public int planetLimit;
 	public int shipLimit;
@@ -74,20 +47,11 @@ public class Game {
 		this.id = id;
 	}
 	
-	public Game(AppUser owner, int height, int width, int planetLimit) {
+	public Game(AppUser owner, int planetLimit, int shipLimit) {
 		
 		this.owner = owner;
-		
-		this.players = new ArrayList<Player>();
-		
-		this.mapHeight = height;
-		this.mapWidth = width;
 		this.planetLimit = planetLimit;
-		
-		this.planets = new ArrayList<Planet>();
-		this.ships = new ArrayList<Ship>();
-		this.mines = new ArrayList<MineField>();
-		this.storms = new ArrayList<IonStorm>();
+		this.shipLimit = shipLimit;
 		
 	}
 	
@@ -101,62 +65,6 @@ public class Game {
 	
 	public AppUser getOwner() {
 		return this.owner;
-	}
-
-	public void setMapHeight(int height) {
-		this.mapHeight = height;
-	}
-
-	public int getMapHeight() {
-		return this.mapHeight;
-	}
-
-	public void setMapWidth(int width) {
-		this.mapWidth = width;
-	}
-
-	public int getMapWidth() {
-		return this.mapWidth;
-	}
-
-	public List<Planet> getPlanets() {
-		return this.planets;
-	}
-
-	public void addPlanet(Planet planet) {
-		this.planets.add(planet);
-	}
-	
-	public Planet findPlanetByName(String name){
-		for(Planet planet : this.planets) {
-			if(planet.getName().equals(name))
-				return planet;
-		}
-		return null;
-	}
-	
-	public List<Ship> getShips() {
-		return this.ships;
-	}
-	
-	public void addShip(Ship ship) {
-		this.ships.add(ship);
-	}
-
-	public List<MineField> getMines() {
-		return this.mines;
-	}
-
-	public void addMineField(MineField minefield) {
-		this.mines.add(minefield);
-	}
-	
-	public List<IonStorm> getStorms() {
-		return this.storms;
-	}
-	
-	public void addStorm(IonStorm storm) {
-		this.storms.add(storm);
 	}
 
 	public void setPlanetLimit(int planetLimit) {
