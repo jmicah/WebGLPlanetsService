@@ -25,29 +25,36 @@ import edu.tamu.framework.model.AbstractCoreUserImpl;
 /**
  * Application User entity.
  * 
+ * A user is the actual person that owns an account. It differs
+ * from the Player entity in the fact that a Player is a virtual
+ * representation of the user in a game. Therefore you can have
+ * multiple Players per user if they're playing multiple games.
+ * 
+ * @author Micah Cooper
+ *
  */
 @Entity
 public class AppUser extends AbstractCoreUserImpl {
 	
-    @Column(nullable = true, unique = true)
+    @Column(nullable = false, unique = true)
     private String email;
 
     // encoded password
     @JsonIgnore
-    @Column(nullable = true)
+    @Column(nullable = false)
     private String password;
 
-    @Column(nullable = true)
+    @Column(nullable = false)
     private String firstName;
 
-    @Column(nullable = true)
+    @Column(nullable = false)
     private String lastName;
 
     @OneToMany (
 			targetEntity = Player.class,
 			cascade = {CascadeType.PERSIST}
 			)
-	public List<Player> players = new ArrayList<Player>();
+	private List<Player> players = new ArrayList<Player>();
     
     /**
      * Constructor for the application user
@@ -69,7 +76,7 @@ public class AppUser extends AbstractCoreUserImpl {
     }
 
     /**
-     * Constructor for application user with email, firstName, lastName and role passed.
+     * Constructor for application user with email, firstName and lastName passed.
      * 
      * @param email
      *            String
@@ -77,16 +84,30 @@ public class AppUser extends AbstractCoreUserImpl {
      *            String
      * @param lastName
      *            String
-     * @param role
-     *            String
      * 
      */
     public AppUser(String email, String firstName, String lastName) {
     	this.email = email;
     	this.firstName = firstName;
     	this.lastName = lastName;
+    	this.password = "password";
     }
     
+    /**
+     * Constructor for application user with email, firstName, lastName and password passed.
+     * 
+     * @param email
+     * @param firstName
+     * @param lastName
+     * @param password
+     */
+    public AppUser(String email, String firstName, String lastName, String password) {
+    	this.email = email;
+    	this.firstName = firstName;
+    	this.lastName = lastName;
+    	this.password = password;
+    }
+        
     /**
      * @return the email
      */
@@ -152,12 +173,29 @@ public class AppUser extends AbstractCoreUserImpl {
         this.lastName = lastName;
     }
     
+	/**
+	 * @return The list of players associated with this 
+	 */
 	public List<Player> getPlayers() {
 		return this.players;
 	}
 
-	public void addPlayer(Player player) {
+	/**
+	 * @param player
+	 * @return The updated list of players.
+	 */
+	public List<Player> addPlayer(Player player) {
 		this.players.add(player);
+		return this.players;
+	}
+	
+	/**
+	 * @param player
+	 * @return The updated list of players.
+	 */
+	public List<Player> removePlayer(Player player) {
+		this.players.remove(player);
+		return this.players;
 	}
 
 }

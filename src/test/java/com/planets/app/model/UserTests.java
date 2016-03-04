@@ -1,7 +1,5 @@
 package com.planets.app.model;
 
-import java.util.List;
-
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -19,7 +17,7 @@ import com.planets.app.model.repo.AppUserRepo;
 @WebAppConfiguration
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = WebServerInit.class)
-public class UserTest {
+public class UserTests {
 	
 	@Autowired
 	private AppUserRepo userRepo;
@@ -30,23 +28,60 @@ public class UserTest {
 	}
 	
 	@Test
-	public void testMethod() {
+	public void testCreateAndDeleteUser() {
 		
 		// Test create user
-		Long uin = Long.parseLong("123456789");
-		AppUser testUser1 = userRepo.create(uin);		
-		AppUser assertUser = userRepo.findByUin(Long.parseLong("123456789"));		
-		Assert.assertEquals("Test User1 was not added.", uin, assertUser.getUin());
-	
-		// Test disallow duplicate ids
-		userRepo.create(Long.parseLong("123456789"));		
-		List<AppUser> allUsers = (List<AppUser>) userRepo.findAll();		
-		Assert.assertEquals("Duplicate Id found.", 1, allUsers.size());
+		Assert.assertEquals("There are already users in the repo.", 0, userRepo.count());
+		AppUser user = userRepo.create("aggiejack@mailinator.com","Jack","Daniels");
+		Assert.assertEquals("The expected number of users does not match.", 1, userRepo.count());
+		Assert.assertEquals("The user we received does not match the given email.", "aggiejack@mailinator.com", user.getEmail());
+		Assert.assertEquals("The user we received does not match the given first name.", "Jack", user.getFirstName());
+		Assert.assertEquals("The user we received does not match the given last name.", "Daniels", user.getLastName());
+		Assert.assertEquals("The user we received does not match the given password.", "password", user.getPassword());
+		Assert.assertEquals("The user we received does not have the correct number of players.", 0, user.getPlayers().size());
 				
 		// Test delete user
-		userRepo.delete(testUser1);		
-		allUsers = (List<AppUser>) userRepo.findAll();		
-		Assert.assertEquals("Test User1 was not removed.", 0, allUsers.size());
+		userRepo.delete(user);			
+		Assert.assertEquals("The user was not removed.", 0, userRepo.count());
+		
+	}
+	
+	@Test
+	public void testDuplicateEmails() {
+		
+		// Create user
+		userRepo.create("aggiejack@mailinator.com","Jack","Daniels");
+		Assert.assertEquals("The expected number of users does not match.", 1, userRepo.count());
+	
+		// Create new user with same email
+		userRepo.create("aggiejack@mailinator.com","Bob","Boring");
+		Assert.assertEquals("The expected number of users does not match.", 1, userRepo.count());
+
+	}
+	
+	@Test
+	public void testUpdatingUserData() {
+		
+		// Create user
+		Assert.assertEquals("There are already users in the repo.", 0, userRepo.count());
+		AppUser user = userRepo.create("aggiejack@mailinator.com","Jack","Daniels");
+		Assert.assertEquals("The expected number of users does not match.", 1, userRepo.count());
+		Assert.assertEquals("The user we received does not match the given email.", "aggiejack@mailinator.com", user.getEmail());
+		Assert.assertEquals("The user we received does not match the given first name.", "Jack", user.getFirstName());
+		Assert.assertEquals("The user we received does not match the given last name.", "Daniels", user.getLastName());
+		Assert.assertEquals("The user we received does not match the given password.", "password", user.getPassword());
+		
+		// Update user info
+		user.setEmail("boring@mailinator.com");
+		user.setFirstName("Bob");
+		user.setLastName("Boring");
+		user.setPassword("secret");
+		userRepo.save(user);		
+		user = userRepo.findByEmail("boring@mailinator.com");
+		Assert.assertEquals("The user we received does not match the given email.", "boring@mailinator.com", user.getEmail());
+		Assert.assertEquals("The user we received does not match the given first name.", "Bob", user.getFirstName());
+		Assert.assertEquals("The user we received does not match the given last name.", "Boring", user.getLastName());
+		Assert.assertEquals("The user we received does not match the given password.", "secret", user.getPassword());
 		
 	}
 	
