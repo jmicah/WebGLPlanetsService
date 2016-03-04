@@ -77,7 +77,8 @@ public class LogbackConfig {
      * @param encoder
      * @return
      */
-    @Bean(initMethod = "start", destroyMethod = "stop")
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+	@Bean(initMethod = "start", destroyMethod = "stop")
     public ConsoleAppender consoleAppender(LoggerContext ctx, PatternLayoutEncoder encoder) {
         ConsoleAppender appender = new ConsoleAppender();
         appender.setContext(ctx);
@@ -94,7 +95,8 @@ public class LogbackConfig {
      * @param encoder
      * @return
      */
-    @Bean(initMethod = "start", destroyMethod = "stop")
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+	@Bean(initMethod = "start", destroyMethod = "stop")
     public RollingFileAppender rollingFileAppender(LoggerContext ctx, PatternLayoutEncoder encoder) {
         RollingFileAppender appender = new RollingFileAppender();
         appender.setFile(loggingFile);
