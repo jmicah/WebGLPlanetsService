@@ -19,7 +19,7 @@ import com.planets.game.model.repo.PlayerRepo;
 @WebAppConfiguration
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = WebServerInit.class)
-public class PlanetTest {
+public class PlanetTests {
 
 	@Autowired
 	private PlanetRepo planets;

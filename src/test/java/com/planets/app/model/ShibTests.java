@@ -19,7 +19,7 @@ import edu.tamu.framework.model.Credentials;
 @WebAppConfiguration
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = WebServerInit.class)
-public class ShibTest {
+public class ShibTests {
 
 	private Map<String, String> aggieJackToken;
 	
