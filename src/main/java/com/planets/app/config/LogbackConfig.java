@@ -19,7 +19,6 @@ import ch.qos.logback.classic.encoder.PatternLayoutEncoder;
 import ch.qos.logback.classic.filter.ThresholdFilter;
 import ch.qos.logback.core.ConsoleAppender;
 import ch.qos.logback.core.rolling.RollingFileAppender;
-import ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy;
 import ch.qos.logback.core.rolling.TimeBasedRollingPolicy;
 import ch.qos.logback.ext.spring.ApplicationContextHolder;
 
@@ -37,9 +36,6 @@ public class LogbackConfig {
 
     @Value("${logging.rolling.pattern}")
     private String rollingPattern;
-
-    @Value("${logging.rolling.file-size}")
-    private String rollingFileSize;
 
     @Value("${logging.rolling.threshold-level}")
     private String rollingThresholdLevel;
@@ -104,9 +100,6 @@ public class LogbackConfig {
         rollingPolicy.setParent(appender);
         rollingPolicy.setFileNamePattern(rollingPattern);
         appender.setRollingPolicy(rollingPolicy);
-        SizeBasedTriggeringPolicy triggeringPolicy = new SizeBasedTriggeringPolicy();
-        triggeringPolicy.setMaxFileSize(rollingFileSize);
-        appender.setTriggeringPolicy(triggeringPolicy);
         ThresholdFilter thresholdFilter = new ThresholdFilter();
         thresholdFilter.setLevel(rollingThresholdLevel);
         appender.addFilter(thresholdFilter);
