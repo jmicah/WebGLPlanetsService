@@ -10,13 +10,11 @@
 package com.planets.app.model;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
 
-import static javax.persistence.CascadeType.ALL;
-import static javax.persistence.CascadeType.PERSIST;
-import static javax.persistence.FetchType.LAZY;
+import static javax.persistence.CascadeType.*;
+import static javax.persistence.FetchType.*;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -56,12 +54,13 @@ public class AppUser extends AbstractCoreUserImpl {
     @Column(nullable = false)
     private String lastName;
 
-    @OneToMany (
-    		cascade = ALL,
-    		fetch = LAZY,
-    		orphanRemoval = true
+    @OneToMany ( 
+    		mappedBy = "owner",
+    		cascade = { MERGE },
+    		fetch = EAGER,
+    		targetEntity = Game.class
     		)
-    private Set<Game> games = new TreeSet<Game>();
+    private Collection<Game> games = new ArrayList<Game>();
     
     @OneToMany (
 			targetEntity = Player.class,
@@ -186,18 +185,24 @@ public class AppUser extends AbstractCoreUserImpl {
         this.lastName = lastName;
     }
     
-    public Set<Game> getGames() {
-    	return this.games;
+    public Collection<Game> getGames() {
+    	return games;
     }
     
-    public Set<Game> addGame(Game game) {
-    	this.games.add(game);
-    	return this.games;
+    public void addGame(Game game) {
+    	if (games.contains(game))
+    		return;
+    	
+    	games.add(game);
+    	game.setOwner(this);
     }
     
-    public Set<Game> removeGame(Game game) {
-    	this.games.remove(game);
-    	return this.games;
+    public void removeGame(Game game) {
+    	if (!games.contains(game))
+    		return;
+    	
+    	games.remove(game);
+    	game.setOwner(null);
     }
     
 	/**

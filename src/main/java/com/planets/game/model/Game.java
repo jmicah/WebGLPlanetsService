@@ -3,14 +3,12 @@ package com.planets.game.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import static javax.persistence.CascadeType.DETACH;
-import static javax.persistence.CascadeType.MERGE;
-import static javax.persistence.CascadeType.REFRESH;
-import static javax.persistence.CascadeType.PERSIST;
+import static javax.persistence.CascadeType.*;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -21,15 +19,13 @@ import com.planets.game.model.Player;
 @Entity
 @Table(name = "game")
 public class Game {
-
+	
 	@Id
 	@GeneratedValue
 	private Long id;
 	
-	@ManyToOne (
-			cascade = { DETACH, REFRESH, MERGE },
-			optional = false
-			)
+	@ManyToOne (optional = true)
+	@JoinColumn(name="owner_id")
 	public AppUser owner;
 	
 	@OneToMany (
@@ -49,9 +45,10 @@ public class Game {
 	
 	public Game(AppUser owner, int planetLimit, int shipLimit) {
 		
-		this.owner = owner;
 		this.planetLimit = planetLimit;
 		this.shipLimit = shipLimit;
+		
+		this.setOwner(owner);
 		
 	}
 	
@@ -60,19 +57,40 @@ public class Game {
 	}
 	
 	public Long getId() {
-		return this.id;
+		return id;
+	}
+	
+	public void setOwner(AppUser owner) {
+		if (sameAsFormer(owner)) {
+			System.out.println("Same as former owner.");
+			return;
+		}
+
+	    AppUser oldOwner = this.owner;
+	    this.owner = owner;
+
+	    if (oldOwner!=null)
+	      oldOwner.removeGame(this);
+
+	    if (owner!=null)
+	      owner.addGame(this);
 	}
 	
 	public AppUser getOwner() {
-		return this.owner;
+		return owner;
 	}
 
+	private boolean sameAsFormer(AppUser newOwner) {
+		System.out.println("Old: " + owner + " vs New: " + newOwner);
+		return owner==null ? newOwner == null : owner.equals(newOwner);
+	}
+	
 	public void setPlanetLimit(int planetLimit) {
 		this.planetLimit = planetLimit;
 	}
 
 	public int getPlanetLimit() {
-		return this.planetLimit;
+		return planetLimit;
 	}
 
 	public void setShipLimit(int shipLimit) {
@@ -80,7 +98,7 @@ public class Game {
 	}
 
 	public int getShipLimit() {
-		return this.shipLimit;
+		return shipLimit;
 	}
 
 	public List<Player> getPlayers() {
@@ -88,7 +106,7 @@ public class Game {
 	}
 
 	public void addPlayer(Player player) {
-		this.players.add(player);
+		players.add(player);
 	}
 	
 }

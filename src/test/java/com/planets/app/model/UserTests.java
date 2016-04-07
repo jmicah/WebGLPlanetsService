@@ -39,7 +39,8 @@ public class UserTests {
 		Assert.assertEquals("The user we received does not match the given last name.", "Daniels", user.getLastName());
 		Assert.assertEquals("The user we received does not match the given password.", "password", user.getPassword());
 		Assert.assertEquals("The user we received does not have the correct number of players.", 0, user.getPlayers().size());
-				
+		Assert.assertEquals("The user we received does not have the correct number of games.", 0, user.getGames().size());
+		
 		// Test delete user
 		userRepo.delete(user);			
 		Assert.assertEquals("The user was not removed.", 0, userRepo.count());

@@ -5,6 +5,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -26,6 +28,8 @@ public class GameTests {
 	@Autowired
 	private AppUserRepo userRepo;
 		
+	private final Logger logger = LoggerFactory.getLogger(this.getClass());
+	
 	@Before
 	public void setUp() {
 		userRepo.create("aggiejack@mailinator.com", "Jack", "Daniels");
@@ -43,6 +47,9 @@ public class GameTests {
 		Assert.assertEquals("The game we received does not match the given planet limit.", 500, game.getPlanetLimit());
 		Assert.assertEquals("The game we received does not match the given ship limit.", 300, game.getShipLimit());
 		
+		//Verify User Relationship
+		Assert.assertEquals("The number of games owned by the user does not macht.", 1, user.getGames().size());
+		
 		// Test delete game
 		gameRepo.delete(game);
 		Assert.assertEquals("The game was not removed.", 0, gameRepo.count());
@@ -55,6 +62,7 @@ public class GameTests {
 		// Create game
 		Assert.assertEquals("There are already games in the repo.", 0, gameRepo.count());
 		AppUser user = userRepo.findByEmail("aggiejack@mailinator.com");
+		logger.debug("Found user: " + user.getFirstName());
 		Game game = gameRepo.create(user, 500, 300);
 		Assert.assertEquals("The expected number of games does not match.", 1, gameRepo.count());
 		Assert.assertEquals("The game we received does not match the given owner.", user, game.getOwner());
@@ -66,7 +74,26 @@ public class GameTests {
 		game.setShipLimit(200);
 		gameRepo.save(game);
 		game = gameRepo.findByOwner(user).get(0);
+		Assert.assertEquals("The game we received does not match the given planet limit.", 400, game.getPlanetLimit());
+		Assert.assertEquals("The game we received does not match the given ship limit.", 200, game.getShipLimit());
 
+	}
+	
+	@Test
+	public void testCascade() {
+		
+		// Create game
+		Assert.assertEquals("There are already games in the repo.", 0, gameRepo.count());
+		AppUser user = userRepo.findByEmail("aggiejack@mailinator.com");
+		Game game = gameRepo.create(user, 500, 300);
+		Assert.assertEquals("The expected number of games does not match.", 1, gameRepo.count());
+		Assert.assertEquals("The game we received does not match the given owner.", user, game.getOwner());
+		Assert.assertEquals("The game we received does not match the given planet limit.", 500, game.getPlanetLimit());
+		Assert.assertEquals("The game we received does not match the given ship limit.", 300, game.getShipLimit());
+		
+		// Delete user
+		userRepo.delete(user);
+		Assert.assertEquals("The game was deleted.", 1, gameRepo.count());
 	}
 	
 	@After
