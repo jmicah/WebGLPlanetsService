@@ -41,7 +41,9 @@ public class GameTests {
 		// Test create game
 		Assert.assertEquals("There are already games in the repo.", 0, gameRepo.count());
 		AppUser user = userRepo.findByEmail("aggiejack@mailinator.com");
-		Game game = gameRepo.create(user, 500, 300);
+		Game game = gameRepo.create(500, 300);
+		user.addGame(game);
+		userRepo.save(user);
 		Assert.assertEquals("The expected number of games does not match.", 1, gameRepo.count());
 		Assert.assertEquals("The game we received does not match the given owner.", user, game.getOwner());
 		Assert.assertEquals("The game we received does not match the given planet limit.", 500, game.getPlanetLimit());
@@ -63,7 +65,9 @@ public class GameTests {
 		Assert.assertEquals("There are already games in the repo.", 0, gameRepo.count());
 		AppUser user = userRepo.findByEmail("aggiejack@mailinator.com");
 		logger.debug("Found user: " + user.getFirstName());
-		Game game = gameRepo.create(user, 500, 300);
+		Game game = gameRepo.create(500, 300);
+		user.addGame(game);
+		userRepo.save(user);
 		Assert.assertEquals("The expected number of games does not match.", 1, gameRepo.count());
 		Assert.assertEquals("The game we received does not match the given owner.", user, game.getOwner());
 		Assert.assertEquals("The game we received does not match the given planet limit.", 500, game.getPlanetLimit());
@@ -85,7 +89,9 @@ public class GameTests {
 		// Create game
 		Assert.assertEquals("There are already games in the repo.", 0, gameRepo.count());
 		AppUser user = userRepo.findByEmail("aggiejack@mailinator.com");
-		Game game = gameRepo.create(user, 500, 300);
+		Game game = gameRepo.create(500, 300);
+		user.addGame(game);
+		userRepo.save(user);
 		Assert.assertEquals("The expected number of games does not match.", 1, gameRepo.count());
 		Assert.assertEquals("The game we received does not match the given owner.", user, game.getOwner());
 		Assert.assertEquals("The game we received does not match the given planet limit.", 500, game.getPlanetLimit());

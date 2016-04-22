@@ -2,7 +2,6 @@ package com.planets.game.model.repo.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.planets.app.model.AppUser;
 import com.planets.game.model.Game;
 import com.planets.game.model.repo.GameRepo;
 import com.planets.game.model.repo.GameRepoCustom;
@@ -22,8 +21,8 @@ public class GameRepoImpl implements GameRepoCustom {
 	}
 
 	@Override
-	public Game create(AppUser owner, int planetLimit, int shipLimit) {
-		return gameRepo.save(new Game(owner, planetLimit, shipLimit));
+	public Game create(int planetLimit, int shipLimit) {
+		return gameRepo.save(new Game(planetLimit, shipLimit));
 	}
 
 }

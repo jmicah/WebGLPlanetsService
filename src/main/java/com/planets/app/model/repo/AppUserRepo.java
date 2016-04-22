@@ -41,8 +41,5 @@ public interface AppUserRepo extends JpaRepository<AppUser, Long>, AppUserRepoCu
      * 
      */
     public AppUser findByEmail(String email);
-    
-    @Override
-	public void delete(AppUser user);
 
 }

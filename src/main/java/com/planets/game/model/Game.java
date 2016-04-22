@@ -24,18 +24,22 @@ public class Game {
 	@GeneratedValue
 	private Long id;
 	
-	@ManyToOne (optional = true)
+	@ManyToOne (
+			optional = true,
+			targetEntity = AppUser.class,
+			cascade = { PERSIST, REMOVE }
+			)
 	@JoinColumn(name="owner_id")
-	public AppUser owner;
+	private AppUser owner;
 	
 	@OneToMany (
 			targetEntity = Player.class,
 			cascade = { PERSIST }
 			)
-	public List<Player> players = new ArrayList<Player>();
+	private List<Player> players = new ArrayList<Player>();
 	
-	public int planetLimit;
-	public int shipLimit;
+	private int planetLimit;
+	private int shipLimit;
 	
 	public Game() {}
 	
@@ -43,12 +47,10 @@ public class Game {
 		this.id = id;
 	}
 	
-	public Game(AppUser owner, int planetLimit, int shipLimit) {
+	public Game(int planetLimit, int shipLimit) {
 		
 		this.planetLimit = planetLimit;
 		this.shipLimit = shipLimit;
-		
-		this.setOwner(owner);
 		
 	}
 	
@@ -66,14 +68,7 @@ public class Game {
 			return;
 		}
 
-	    AppUser oldOwner = this.owner;
 	    this.owner = owner;
-
-	    if (oldOwner!=null)
-	      oldOwner.removeGame(this);
-
-	    if (owner!=null)
-	      owner.addGame(this);
 	}
 	
 	public AppUser getOwner() {
