@@ -56,11 +56,11 @@ public class AppUser extends AbstractCoreUserImpl {
 
     @OneToMany ( 
     		mappedBy = "owner",
-    		cascade = { MERGE, REFRESH, DETACH, PERSIST },
+    		cascade = { MERGE },
     		fetch = EAGER,
     		targetEntity = Game.class
     		)
-    private List<Game> games = new ArrayList<Game>();
+    private Collection<Game> games = new ArrayList<Game>();
     
     @OneToMany (
 			targetEntity = Player.class,

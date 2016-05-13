@@ -25,5 +25,12 @@ public interface AppUserRepoCustom {
     public AppUser create(Long uin);
 
     public AppUser create(String email, String firstName, String lastName);
+    
+    /**
+	 * method to delete application user
+	 * 
+	 * @param       user        AppUser
+	 */
+	public void delete(AppUser user);
 
 }
