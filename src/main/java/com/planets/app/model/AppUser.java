@@ -54,6 +54,12 @@ public class AppUser extends AbstractCoreUserImpl {
     @Column(nullable = false)
     private String lastName;
 
+    /**
+     * Games created/owned by the user.
+     * NOT games they are playing. That is
+     * determined by the the list of players.
+     * 
+     */
     @OneToMany ( 
     		mappedBy = "owner",
     		cascade = { MERGE },
@@ -62,6 +68,11 @@ public class AppUser extends AbstractCoreUserImpl {
     		)
     private Collection<Game> games = new ArrayList<Game>();
     
+    /**
+     * Any Race/Faction that the user is
+     * playing in any game.
+     * 
+     */
     @OneToMany (
 			targetEntity = Player.class,
 			cascade = { PERSIST }
