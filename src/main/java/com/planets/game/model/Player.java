@@ -1,15 +1,25 @@
 package com.planets.game.model;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.planets.app.model.AppUser;
 import com.planets.game.enums.RaceType;
 
+/**
+ * Player entity.
+ * 
+ * A player is Race or Faction in a game. It could
+ * be controlled/owned by an AppUser or by the
+ * computer.
+ * 
+ * @author Micah Cooper
+ *
+ */
 @Entity
 @Table(name = "player")
 public class Player {
@@ -20,16 +30,12 @@ public class Player {
 	
 	public RaceType raceType;
 	
-	@ManyToOne(
-			targetEntity = AppUser.class,
-			cascade = {CascadeType.PERSIST}
-			)
-	public AppUser user;
+	@ManyToOne (optional = true)
+	@JoinColumn(name="owner_id")
+	public AppUser owner;
 	
-	@ManyToOne(
-			targetEntity = Game.class,
-			cascade = {CascadeType.PERSIST}
-			)
+	@ManyToOne
+	@JoinColumn(name="game_id")
 	public Game game;
 	
 	public Player() {}
@@ -38,8 +44,10 @@ public class Player {
 		this.id = id;
 	}
 	
-	public Player(RaceType race){
+	public Player(RaceType race, Game game){
 		this.raceType = race;
+		
+		this.setGame(game);
 	}
 	
 	public void setId(Long id) {
@@ -50,12 +58,50 @@ public class Player {
 		return this.id;
 	}
 	
-	public void setUser(AppUser user) {
-		this.user = user;
+	public void setOwner(AppUser owner) {
+		if (sameAsFormerOwner(owner)) {
+			return;
+		}
+
+	    AppUser oldOwner = this.owner;
+	    this.owner = owner;
+
+	    if (oldOwner!=null)
+	      oldOwner.removePlayer(this);
+
+	    if (owner!=null)
+	      owner.addPlayer(this);
 	}
 
-	public AppUser getUser() {
-		return this.user;
+	public AppUser getOwner() {
+		return this.owner;
+	}
+	
+	private boolean sameAsFormerOwner(AppUser newOwner) {
+		return owner==null ? newOwner == null : owner.equals(newOwner);
+	}
+	
+	public void setGame(Game game) {
+		if (sameAsFormerGame(game)) {
+			return;
+		}
+
+	    Game oldGame = this.game;
+	    this.game = game;
+
+	    if (oldGame!=null)
+	    	oldGame.removePlayer(this);
+
+	    if (game!=null)
+	    	game.addPlayer(this);
+	}
+	
+	public Game getGame() {
+		return this.game;
+	}
+	
+	private boolean sameAsFormerGame(Game newGame) {
+		return game==null ? newGame == null : game.equals(newGame);
 	}
 	
 	public void setRaceType(RaceType race) {

@@ -11,7 +11,6 @@ package com.planets.app.model;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 import static javax.persistence.CascadeType.*;
 import static javax.persistence.FetchType.*;
@@ -74,10 +73,12 @@ public class AppUser extends AbstractCoreUserImpl {
      * 
      */
     @OneToMany (
-			targetEntity = Player.class,
-			cascade = { PERSIST }
+    		mappedBy = "owner",			
+			cascade = { MERGE },
+			fetch = EAGER,
+			targetEntity = Player.class
 			)
-	private List<Player> players = new ArrayList<Player>();
+	private Collection<Player> players = new ArrayList<Player>();
     
     /**
      * Constructor for the application user
@@ -219,26 +220,32 @@ public class AppUser extends AbstractCoreUserImpl {
 	/**
 	 * @return The list of players associated with this 
 	 */
-	public List<Player> getPlayers() {
+	public Collection<Player> getPlayers() {
 		return this.players;
 	}
 
 	/**
 	 * @param player
-	 * @return The updated list of players.
+	 * 
 	 */
-	public List<Player> addPlayer(Player player) {
-		this.players.add(player);
-		return this.players;
+	public void addPlayer(Player player) {
+		if (players.contains(player))
+			return;
+		
+		players.add(player);
+		player.setOwner(this);
 	}
 	
 	/**
 	 * @param player
-	 * @return The updated list of players.
+	 * 			Player
 	 */
-	public List<Player> removePlayer(Player player) {
-		this.players.remove(player);
-		return this.players;
+	public void removePlayer(Player player) {
+		if (!players.contains(player))
+			return;
+		
+		players.remove(player);
+		player.setOwner(null);
 	}
 
 }

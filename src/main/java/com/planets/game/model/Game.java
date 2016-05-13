@@ -1,9 +1,10 @@
 package com.planets.game.model;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
 
 import static javax.persistence.CascadeType.*;
+import static javax.persistence.FetchType.EAGER;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -28,11 +29,13 @@ public class Game {
 	@JoinColumn(name="owner_id")
 	public AppUser owner;
 	
-	@OneToMany (
-			targetEntity = Player.class,
-			cascade = { PERSIST }
-			)
-	public List<Player> players = new ArrayList<Player>();
+	@OneToMany ( 
+    		mappedBy = "game",
+    		cascade = { MERGE },
+    		fetch = EAGER,
+    		targetEntity = Player.class
+    		)
+	public Collection<Player> players = new ArrayList<Player>();
 	
 	public int planetLimit;
 	public int shipLimit;
@@ -99,12 +102,35 @@ public class Game {
 		return shipLimit;
 	}
 
-	public List<Player> getPlayers() {
+	/**
+	 * @return The list of players associated with this 
+	 */
+	public Collection<Player> getPlayers() {
 		return this.players;
 	}
 
+	/**
+	 * @param player
+	 * 
+	 */
 	public void addPlayer(Player player) {
+		if (players.contains(player))
+			return;
+		
 		players.add(player);
+		player.setGame(this);
+	}
+	
+	/**
+	 * @param player
+	 * 			Player
+	 */
+	public void removePlayer(Player player) {
+		if (!players.contains(player))
+			return;
+		
+		players.remove(player);
+		player.setGame(null);
 	}
 	
 }

@@ -12,5 +12,9 @@ public interface PlayerRepo extends JpaRepository<Player, Long>, PlayerRepoCusto
 
 	public Player findById(Long id);
 	
-	public Player findByUser(AppUser user);
+	public Player findByOwner(AppUser owner);
+
+	@Override
+	public void delete(Player player);
+
 }

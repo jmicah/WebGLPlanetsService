@@ -23,7 +23,9 @@ import com.planets.app.model.AppUser;
 import com.planets.app.model.repo.AppUserRepo;
 import com.planets.app.model.repo.AppUserRepoCustom;
 import com.planets.game.model.Game;
+import com.planets.game.model.Player;
 import com.planets.game.model.repo.GameRepo;
+import com.planets.game.model.repo.PlayerRepo;
 
 /**
  * 
@@ -38,6 +40,9 @@ public class AppUserRepoImpl implements AppUserRepoCustom {
     @Autowired
     private GameRepo gameRepo;
 
+    @Autowired
+    private PlayerRepo playerRepo;
+    
     @PersistenceContext
 	EntityManager em;
         
@@ -69,16 +74,31 @@ public class AppUserRepoImpl implements AppUserRepoCustom {
 	@Transactional
 	public void delete(AppUser user) {
     
-	    Iterator<Game> it = user.getGames().iterator();
+	    Iterator<Game> git = user.getGames().iterator();
 		int i = user.getGames().size();
-		while (it.hasNext()) {
+		while (git.hasNext()) {
 			i--;
-			Game g = it.next();
+			Game g = git.next();
 			logger.debug("Removing game: " + g.getId());
 			g.setOwner(null);
 			gameRepo.save(g);
 			if(i>0) {
-				it.remove();
+				git.remove();
+			} else {
+				break;
+			}
+		}
+		
+		Iterator<Player> pit = user.getPlayers().iterator();
+		i = user.getPlayers().size();
+		while (pit.hasNext()) {
+			i--;
+			Player p = pit.next();
+			logger.debug("Removing player: " + p.getId());
+			p.setOwner(null);
+			playerRepo.save(p);
+			if(i>0) {
+				pit.remove();
 			} else {
 				break;
 			}
