@@ -9,4 +9,6 @@ public interface GameRepoCustom {
 	
 	public Game create(AppUser owner, int planetLimit, int shipLimit);
 	
+	public void delete(Game game);
+	
 }

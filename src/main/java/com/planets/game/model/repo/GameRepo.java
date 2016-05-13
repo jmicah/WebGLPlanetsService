@@ -15,4 +15,7 @@ public interface GameRepo extends JpaRepository<Game, Long>, GameRepoCustom {
 	
 	public List<Game> findByOwner(AppUser owner);
 	
+	@Override
+	public void delete(Game game);
+	
 }

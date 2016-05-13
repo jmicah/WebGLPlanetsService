@@ -38,7 +38,7 @@ public class GameTests {
 	@Test
 	public void testCreateAndDeleteGame() {
 		
-		// Test create game
+		// Create game
 		Assert.assertEquals("There are already games in the repo.", 0, gameRepo.count());
 		AppUser user = userRepo.findByEmail("aggiejack@mailinator.com");
 		Game game = gameRepo.create(user, 500, 300);
@@ -47,12 +47,11 @@ public class GameTests {
 		Assert.assertEquals("The game we received does not match the given planet limit.", 500, game.getPlanetLimit());
 		Assert.assertEquals("The game we received does not match the given ship limit.", 300, game.getShipLimit());
 		
-		//Verify User Relationship
-		Assert.assertEquals("The number of games owned by the user does not macht.", 1, user.getGames().size());
-		
-		// Test delete game
+		// Delete user
 		gameRepo.delete(game);
-		Assert.assertEquals("The game was not removed.", 0, gameRepo.count());
+		Assert.assertEquals("The user was deleted.", 1, userRepo.count());
+		Assert.assertEquals("The user still is associated with a game.", 0, user.getGames().size());
+		Assert.assertEquals("The game was not deleted.", 0, gameRepo.count());
 		
 	}
 	
@@ -80,7 +79,7 @@ public class GameTests {
 	}
 	
 	@Test
-	public void testCascade() {
+	public void testCascadeDeleteUser() {
 		
 		// Create game
 		Assert.assertEquals("There are already games in the repo.", 0, gameRepo.count());
@@ -93,8 +92,10 @@ public class GameTests {
 		
 		// Delete user
 		userRepo.delete(user);
+		Assert.assertEquals("The user was not deleted.", 0, userRepo.count());
 		Assert.assertEquals("The game was deleted.", 1, gameRepo.count());
 	}
+	
 	
 	@After
 	public void cleanUp() {
