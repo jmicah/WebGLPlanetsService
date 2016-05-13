@@ -84,7 +84,7 @@ public class GameTests {
 	}
 	
 	@Test
-	public void testCascadeDeleteUser() {
+	public void testCascade() {
 		
 		// Create game
 		Assert.assertEquals("There are already games in the repo.", 0, gameRepo.count());
@@ -100,27 +100,6 @@ public class GameTests {
 		// Delete user
 		userRepo.delete(user);
 		Assert.assertEquals("The game was deleted.", 1, gameRepo.count());
-		Assert.assertEquals("The user was not delete.", 0, userRepo.count());
-	}
-	
-	@Test
-	public void testCascadeDeleteGame() {
-		
-		// Create game
-		Assert.assertEquals("There are already games in the repo.", 0, gameRepo.count());
-		AppUser user = userRepo.findByEmail("aggiejack@mailinator.com");
-		Game game = gameRepo.create(500, 300);
-		user.addGame(game);
-		userRepo.save(user);
-		Assert.assertEquals("The expected number of games does not match.", 1, gameRepo.count());
-		Assert.assertEquals("The game we received does not match the given owner.", user, game.getOwner());
-		Assert.assertEquals("The game we received does not match the given planet limit.", 500, game.getPlanetLimit());
-		Assert.assertEquals("The game we received does not match the given ship limit.", 300, game.getShipLimit());
-		
-		// Delete user
-		gameRepo.delete(game);
-		Assert.assertEquals("The user was delete.", 1, userRepo.count());
-		Assert.assertEquals("The game was not deleted.", 0, gameRepo.count());
 	}
 	
 	@After
