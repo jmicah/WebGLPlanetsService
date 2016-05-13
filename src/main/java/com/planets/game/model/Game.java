@@ -62,7 +62,6 @@ public class Game {
 	
 	public void setOwner(AppUser owner) {
 		if (sameAsFormer(owner)) {
-			System.out.println("Same as former owner.");
 			return;
 		}
 
@@ -81,7 +80,6 @@ public class Game {
 	}
 
 	private boolean sameAsFormer(AppUser newOwner) {
-		System.out.println("Old: " + owner + " vs New: " + newOwner);
 		return owner==null ? newOwner == null : owner.equals(newOwner);
 	}
 	
